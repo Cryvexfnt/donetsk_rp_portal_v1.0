@@ -1,234 +1,154 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Donetsk RP</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-color: #08090b;
-            --card-bg: rgba(22, 24, 28, 0.8);
-            --accent-color: #3b82f6;
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --border: rgba(255, 255, 255, 0.05);
-        }
+import React, { useState } from 'react';
+import { 
+  Home, Trophy, Users, User, Wallet, 
+  ChevronRight, Star, Shield, ShoppingBag, Settings 
+} from 'lucide-react';
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            background-color: var(--bg-color);
-            background-image: radial-gradient(circle at 50% -20%, #1e293b, transparent);
-            color: var(--text-main);
-            font-family: 'Inter', -apple-system, sans-serif;
-            margin: 0; padding: 16px; padding-bottom: 100px;
-            overflow-x: hidden;
-        }
+const DonetskApp = () => {
+  const [activeTab, setActiveTab] = useState('home');
 
-        /* Header */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-        .server-tag { background: #1e293b; padding: 6px 12px; border-radius: 10px; font-size: 12px; border: 1px solid var(--border); color: var(--accent-color); font-weight: 600; }
+  // Данные игрока
+  const playerData = {
+    username: "Cryvex",
+    balance: "1,250,000",
+    donat: "500",
+    level: 12,
+    xp: 75, // в процентах
+    rank: "Местный"
+  };
 
-        /* Banner Card */
-        .banner {
-            background: linear-gradient(135deg, #1e3a8a 0%, #000000 100%);
-            border-radius: 20px; padding: 20px; margin-bottom: 16px;
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-
-        /* Grid */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .grid-item {
-            background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: 18px; padding: 16px; text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        .grid-item i { font-size: 24px; margin-bottom: 8px; color: var(--accent-color); }
-        .grid-item span { display: block; font-size: 13px; font-weight: 500; }
-
-        /* Profile Card */
-        .profile-card {
-            background: var(--card-bg); border-radius: 24px; padding: 30px 20px;
-            text-align: center; border: 1px solid var(--border); margin-top: 10px;
-        }
-        .avatar-circle {
-            width: 90px; height: 90px; border-radius: 50%; background: #2d3748;
-            margin: 0 auto 15px; border: 3px solid var(--accent-color);
-            display: flex; align-items: center; justify-content: center; font-size: 40px;
-            overflow: hidden;
-        }
-        .role-pill {
-            display: inline-block; padding: 6px 16px; border-radius: 12px;
-            background: rgba(59, 130, 246, 0.15); color: var(--accent-color);
-            font-weight: 700; font-size: 12px; margin-top: 10px; text-transform: uppercase;
-        }
-
-        /* Navigation */
-        .nav-bar {
-            position: fixed; bottom: 20px; left: 16px; right: 16px;
-            background: rgba(15, 17, 21, 0.95); backdrop-filter: blur(15px);
-            border-radius: 24px; display: flex; justify-content: space-around;
-            padding: 12px 8px; border: 1px solid var(--border); z-index: 1000;
-        }
-        .nav-link { color: var(--text-dim); text-decoration: none; text-align: center; flex: 1; transition: 0.2s; }
-        .nav-link.active { color: var(--accent-color); }
-        .nav-link i { display: block; font-size: 20px; margin-bottom: 4px; }
-        .nav-link span { font-size: 10px; font-weight: 600; }
-
-        /* Utility */
-        .screen { display: none; animation: slideUp 0.3s ease-out; }
-        .screen.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .hidden { display: none !important; }
-
-        /* Registration Overlay */
-        #reg-screen {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: var(--bg-color); z-index: 2000; padding: 40px 20px;
-        }
-        input {
-            width: 100%; background: #16181c; border: 1px solid var(--border);
-            padding: 16px; border-radius: 14px; color: #fff; margin-bottom: 12px; font-size: 16px;
-        }
-        .btn-start {
-            background: var(--accent-color); color: #fff; border: none;
-            width: 100%; padding: 16px; border-radius: 14px; font-weight: 700; font-size: 16px;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="reg-screen" class="hidden">
-        <h1 style="text-align: center; margin-bottom: 10px;">DONETSK</h1>
-        <p style="text-align: center; color: var(--text-dim); margin-bottom: 40px;">Авторизация в системе</p>
-        <input type="text" id="nick-input" placeholder="Ваш игровой ник">
-        <button class="btn-start" onclick="saveProfile()">Войти в портал</button>
-    </div>
-
-    <div id="main-content">
-        <div class="header">
-            <div class="logo">DONETSK RP</div>
-            <div class="server-tag">SERVER 01</div>
+  return (
+    <div className="min-h-screen bg-[#0f0f0f] text-white font-sans selection:bg-[#8774e1]/30">
+      
+      {/* --- ВЕРХНЯЯ ПАНЕЛЬ (HEADER) --- */}
+      <header className="sticky top-0 z-50 bg-[#161616]/80 backdrop-blur-xl border-b border-white/5 p-4 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8774e1] to-[#5a4ad1] flex items-center justify-center shadow-lg shadow-[#8774e1]/20">
+            <span className="font-black text-xl">D</span>
+          </div>
+          <div>
+            <h1 className="text-sm font-bold tracking-tight uppercase">Donetsk <span className="text-[#8774e1]">RP</span></h1>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-[10px] text-gray-400 font-medium">Online: 842</span>
+            </div>
+          </div>
         </div>
+        <button className="p-2 bg-white/5 rounded-full border border-white/10">
+          <Settings size={20} className="text-gray-400" />
+        </button>
+      </header>
 
-        <div id="home" class="screen active">
-            <div class="banner">
+      {/* --- ОСНОВНОЙ КОНТЕНТ --- */}
+      <main className="p-4 pb-32 space-y-6">
+        
+        {/* КАРТОЧКА ПРОФИЛЯ */}
+        <section className="relative overflow-hidden bg-[#1c1c1c] rounded-3xl border border-white/10 p-5 shadow-2xl">
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-6">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <img 
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donetsk" 
+                    className="w-16 h-16 rounded-2xl bg-[#252525] border-2 border-[#8774e1]" 
+                    alt="Avatar"
+                  />
+                  <div className="absolute -bottom-2 -right-2 bg-[#8774e1] text-[10px] px-2 py-0.5 rounded-full font-bold">
+                    {playerData.level} LVL
+                  </div>
+                </div>
                 <div>
-                    <div style="font-weight: 800; font-size: 18px;">Мэр города</div>
-                    <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">Выборы скоро начнутся</div>
+                  <h2 className="text-xl font-bold">{playerData.username}</h2>
+                  <p className="text-xs text-gray-400">{playerData.rank}</p>
                 </div>
-                <i class="fa-solid fa-landmark-flag" style="font-size: 32px; opacity: 0.8;"></i>
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Донат</div>
+                <div className="text-[#8774e1] font-mono font-bold">{playerData.donat} DC</div>
+              </div>
             </div>
-            
-            <div class="grid">
-                <div class="grid-item">
-                    <i class="fa-solid fa-users-gear"></i>
-                    <span>Администрация</span>
-                </div>
-                <div class="grid-item">
-                    <i class="fa-solid fa-newspaper"></i>
-                    <span>Новости</span>
-                </div>
+
+            {/* Прогресс бар */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-[11px] font-medium">
+                <span className="text-gray-400">Опыт уровня</span>
+                <span>{playerData.xp}%</span>
+              </div>
+              <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-[#8774e1] to-[#b0a3ff] rounded-full transition-all duration-1000"
+                  style={{ width: `${playerData.xp}%` }}
+                ></div>
+              </div>
             </div>
+          </div>
+          {/* Декоративный круг на фоне */}
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#8774e1]/10 blur-3xl rounded-full"></div>
+        </section>
+
+        {/* БАЛАНС */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-[#1c1c1c] p-4 rounded-2xl border border-white/5 flex flex-col gap-1">
+            <span className="text-[10px] text-gray-500 uppercase font-bold">На руках</span>
+            <span className="text-lg font-mono font-bold text-green-400">₽{playerData.balance}</span>
+          </div>
+          <div className="bg-[#1c1c1c] p-4 rounded-2xl border border-white/5 flex flex-col gap-1">
+            <span className="text-[10px] text-gray-500 uppercase font-bold">В банке</span>
+            <span className="text-lg font-mono font-bold text-blue-400">₽4,000,000</span>
+          </div>
         </div>
 
-        <div id="fractions" class="screen">
-            <h3>Государственные структуры</h3>
-            <div class="grid">
-                <div class="grid-item"><i class="fa-solid fa-shield-halved"></i><span>МВД</span></div>
-                <div class="grid-item"><i class="fa-solid fa-kit-medical"></i><span>МЗ</span></div>
-                <div class="grid-item"><i class="fa-solid fa-fire-extinguisher"></i><span>МЧС</span></div>
-                <div class="grid-item"><i class="fa-solid fa-building-columns"></i><span>Правительство</span></div>
-            </div>
-        </div>
+        {/* СЕТКА РАЗДЕЛОВ (Как на сайте) */}
+        <section className="grid grid-cols-2 gap-4">
+          <MenuCard icon={<Shield className="text-red-400" />} title="Фракции" subtitle="Управление" />
+          <MenuCard icon={<ShoppingBag className="text-yellow-400" />} title="Магазин" subtitle="Донат услуги" />
+          <MenuCard icon={<Users className="text-blue-400" />} title="Семьи" subtitle="Рейтинги" />
+          <MenuCard icon={<Star className="text-purple-400" />} title="Квесты" subtitle="Задания" />
+        </section>
 
-        <div id="jobs" class="screen">
-            <h3>Доступные вакансии</h3>
-            <div class="grid">
-                <div class="grid-item"><i class="fa-solid fa-taxi"></i><span>Такси</span></div>
-                <div class="grid-item"><i class="fa-solid fa-truck"></i><span>Дальнобой</span></div>
-            </div>
-        </div>
+        {/* КНОПКА ДЕЙСТВИЯ */}
+        <button className="w-full group relative overflow-hidden bg-[#8774e1] p-5 rounded-2xl font-black uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(135,116,225,0.3)] active:scale-95 transition-all">
+          <span className="relative z-10 flex items-center justify-center gap-2">
+            Играть в Donetsk RP <ChevronRight size={18} />
+          </span>
+          <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12"></div>
+        </button>
 
-        <div id="profile" class="screen">
-            <div class="profile-card">
-                <div class="avatar-circle" id="user-avatar">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <h2 id="display-nick" style="margin: 0;">Никнейм</h2>
-                <div id="display-role" class="role-pill">Участник</div>
-                
-                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px;">
-                        <small style="color: var(--text-dim); display: block;">ID аккаунта</small>
-                        <b>#77102</b>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px;">
-                        <small style="color: var(--text-dim); display: block;">Репутация</small>
-                        <b style="color: #10b981;">+120</b>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </main>
+
+      {/* --- НИЖНЕЕ МЕНЮ (NAVBAR) --- */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#161616]/90 backdrop-blur-2xl border-t border-white/5 px-6 py-4 flex justify-between items-center shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+        <NavButton active={activeTab === 'home'} onClick={() => setActiveTab('home')} icon={<Home />} label="Главная" />
+        <NavButton active={activeTab === 'tasks'} onClick={() => setActiveTab('tasks')} icon={<Trophy />} label="Задания" />
+        <NavButton active={activeTab === 'friends'} onClick={() => setActiveTab('friends')} icon={<Users />} label="Друзья" />
+        <NavButton active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} icon={<User />} label="Профиль" />
+      </nav>
     </div>
+  );
+};
 
-    <nav class="nav-bar">
-        <a href="#" class="nav-link active" onclick="showScreen('home', this)">
-            <i class="fa-solid fa-house-chimney"></i><span>Главная</span>
-        </a>
-        <a href="#" class="nav-link" onclick="showScreen('fractions', this)">
-            <i class="fa-solid fa-users"></i><span>Фракции</span>
-        </a>
-        <a href="#" class="nav-link" onclick="showScreen('jobs', this)">
-            <i class="fa-solid fa-briefcase"></i><span>Работа</span>
-        </a>
-        <a href="#" class="nav-link" onclick="showScreen('profile', this)">
-            <i class="fa-solid fa-circle-user"></i><span>Профиль</span>
-        </a>
-    </nav>
+// Вспомогательный компонент для карточек меню
+const MenuCard = ({ icon, title, subtitle }) => (
+  <button className="bg-[#1c1c1c] p-4 rounded-2xl border border-white/5 flex flex-col items-start gap-3 hover:bg-[#252525] transition-colors text-left group">
+    <div className="p-2 bg-white/5 rounded-xl group-hover:scale-110 transition-transform">
+      {icon}
+    </div>
+    <div>
+      <div className="text-sm font-bold">{title}</div>
+      <div className="text-[10px] text-gray-500">{subtitle}</div>
+    </div>
+  </button>
+);
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+// Вспомогательный компонент для кнопок навигации
+const NavButton = ({ active, icon, label, onClick }) => (
+  <button 
+    onClick={onClick}
+    className={`flex flex-col items-center gap-1 transition-all ${active ? 'text-[#8774e1] scale-110' : 'text-gray-500'}`}
+  >
+    {React.cloneElement(icon, { size: 22, strokeWidth: active ? 2.5 : 2 })}
+    <span className={`text-[10px] font-bold ${active ? 'opacity-100' : 'opacity-50'}`}>{label}</span>
+  </button>
+);
 
-        let userData = JSON.parse(localStorage.getItem('donetsk_user'));
-
-        if (!userData) {
-            document.getElementById('reg-screen').classList.remove('hidden');
-            document.getElementById('main-content').classList.add('hidden');
-        } else {
-            renderProfile();
-        }
-
-        function saveProfile() {
-            const nick = document.getElementById('nick-input').value;
-            if (nick.length < 3) return alert("Ник слишком короткий!");
-            
-            userData = { nick: nick, role: "Участник" };
-            localStorage.setItem('donetsk_user', JSON.stringify(userData));
-            
-            document.getElementById('reg-screen').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
-            renderProfile();
-        }
-
-        function renderProfile() {
-            document.getElementById('display-nick').innerText = userData.nick;
-            document.getElementById('display-role').innerText = userData.role;
-        }
-
-        function showScreen(id, el) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            el.classList.add('active');
-            
-            tg.HapticFeedback.impactOccurred('light');
-        }
-    </script>
-</body>
-</html>
+export default DonetskApp;
