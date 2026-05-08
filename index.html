@@ -3,183 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DONETSK PORTAL</title>
+    <title>Donetsk RP</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --neon-blue: #00f2ff;
-            --neon-red: #ff3131;
-            --bg-dark: #0d0e12;
-            --card-bg: rgba(25, 27, 38, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.05);
+            --bg-color: #08090b;
+            --card-bg: rgba(22, 24, 28, 0.8);
+            --accent-color: #3b82f6;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.05);
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            background: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 0%, rgba(0, 242, 255, 0.08), transparent 50%);
-            color: #fff;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% -20%, #1e293b, transparent);
+            color: var(--text-main);
             font-family: 'Inter', -apple-system, sans-serif;
-            margin: 0; padding: 20px;
-            padding-bottom: 100px;
+            margin: 0; padding: 16px; padding-bottom: 100px;
+            overflow-x: hidden;
         }
 
-        /* Заголовок как на скрине */
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .logo { font-size: 26px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
-        .srv-code { background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 10px; font-family: monospace; cursor: pointer; display: flex; gap: 8px; align-items: center; border: 1px solid var(--glass-border); }
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+        .server-tag { background: #1e293b; padding: 6px 12px; border-radius: 10px; font-size: 12px; border: 1px solid var(--border); color: var(--accent-color); font-weight: 600; }
 
-        /* Карточки */
-        .card {
-            background: var(--card-bg);
+        /* Banner Card */
+        .banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #000000 100%);
+            border-radius: 20px; padding: 20px; margin-bottom: 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* Grid */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .grid-item {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 18px; padding: 16px; text-align: center;
             backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
+        }
+        .grid-item i { font-size: 24px; margin-bottom: 8px; color: var(--accent-color); }
+        .grid-item span { display: block; font-size: 13px; font-weight: 500; }
+
+        /* Profile Card */
+        .profile-card {
+            background: var(--card-bg); border-radius: 24px; padding: 30px 20px;
+            text-align: center; border: 1px solid var(--border); margin-top: 10px;
+        }
+        .avatar-circle {
+            width: 90px; height: 90px; border-radius: 50%; background: #2d3748;
+            margin: 0 auto 15px; border: 3px solid var(--accent-color);
+            display: flex; align-items: center; justify-content: center; font-size: 40px;
+            overflow: hidden;
+        }
+        .role-pill {
+            display: inline-block; padding: 6px 16px; border-radius: 12px;
+            background: rgba(59, 130, 246, 0.15); color: var(--accent-color);
+            font-weight: 700; font-size: 12px; margin-top: 10px; text-transform: uppercase;
         }
 
-        .admin-banner { background: linear-gradient(90deg, #2a1b3d, #1a1b26); border-left: 4px solid #a855f7; display: flex; justify-content: space-between; align-items: center; }
-
-        /* Сетка фракций */
-        .fraction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .frac-card { background: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--glass-border); }
-        .frac-card i { font-size: 24px; margin-bottom: 10px; color: var(--neon-blue); }
-
-        /* Плавающая кнопка SOS */
-        .sos-btn {
-            position: fixed; right: 20px; bottom: 90px;
-            width: 55px; height: 55px; background: #e11d48;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(225, 29, 72, 0.4); z-index: 99; border: none; color: #fff;
+        /* Navigation */
+        .nav-bar {
+            position: fixed; bottom: 20px; left: 16px; right: 16px;
+            background: rgba(15, 17, 21, 0.95); backdrop-filter: blur(15px);
+            border-radius: 24px; display: flex; justify-content: space-around;
+            padding: 12px 8px; border: 1px solid var(--border); z-index: 1000;
         }
+        .nav-link { color: var(--text-dim); text-decoration: none; text-align: center; flex: 1; transition: 0.2s; }
+        .nav-link.active { color: var(--accent-color); }
+        .nav-link i { display: block; font-size: 20px; margin-bottom: 4px; }
+        .nav-link span { font-size: 10px; font-weight: 600; }
 
-        /* Навигация */
-        .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(13, 14, 18, 0.9); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid var(--glass-border); }
-        .nav-item { color: #6b7280; text-decoration: none; text-align: center; font-size: 10px; transition: 0.3s; }
-        .nav-item.active { color: #fff; }
-        .nav-item i { display: block; font-size: 22px; margin-bottom: 4px; }
-
-        /* Модалки */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; padding: 25px; box-sizing: border-box; }
-        input, textarea, select { background: #1f2937; border: 1px solid #374151; padding: 14px; color: #fff; border-radius: 12px; margin-bottom: 15px; width: 100%; outline: none; }
-        .btn-main { background: var(--neon-blue); color: #000; font-weight: bold; padding: 14px; border-radius: 12px; border: none; width: 100%; }
-
+        /* Utility */
+        .screen { display: none; animation: slideUp 0.3s ease-out; }
+        .screen.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .hidden { display: none !important; }
+
+        /* Registration Overlay */
+        #reg-screen {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: var(--bg-color); z-index: 2000; padding: 40px 20px;
+        }
+        input {
+            width: 100%; background: #16181c; border: 1px solid var(--border);
+            padding: 16px; border-radius: 14px; color: #fff; margin-bottom: 12px; font-size: 16px;
+        }
+        .btn-start {
+            background: var(--accent-color); color: #fff; border: none;
+            width: 100%; padding: 16px; border-radius: 14px; font-weight: 700; font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
-    <div id="reg-screen" class="overlay">
-        <h1 style="margin-top: 50px;">DONETSK</h1>
-        <p style="color: #9ca3af;">Добро пожаловать в портал города</p>
-        <input type="text" id="reg-nick" placeholder="Ваш никнейм">
-        <select id="reg-role">
-            <option value="Участник">Роль: Участник</option>
-            <option value="Владелец">Роль: Владелец (Тест админ-прав)</option>
-        </select>
-        <button class="btn-main" onclick="finishReg()">Начать игру</button>
+    <div id="reg-screen" class="hidden">
+        <h1 style="text-align: center; margin-bottom: 10px;">DONETSK</h1>
+        <p style="text-align: center; color: var(--text-dim); margin-bottom: 40px;">Авторизация в системе</p>
+        <input type="text" id="nick-input" placeholder="Ваш игровой ник">
+        <button class="btn-start" onclick="saveProfile()">Войти в портал</button>
     </div>
 
-    <header>
-        <div class="logo">DONETSK</div>
-        <div class="srv-code" onclick="copySrv()">
-            <span id="sc">DONETSK-RP</span>
-            <i class="fa-regular fa-copy"></i>
+    <div id="main-content">
+        <div class="header">
+            <div class="logo">DONETSK RP</div>
+            <div class="server-tag">SERVER 01</div>
         </div>
-    </header>
 
-    <div id="p-home">
-        <div class="card admin-banner">
-            <div>
-                <div style="font-size: 14px; font-weight: bold;">Администрация</div>
-                <div style="font-size: 12px; color: #9ca3af;">12 человек онлайн</div>
+        <div id="home" class="screen active">
+            <div class="banner">
+                <div>
+                    <div style="font-weight: 800; font-size: 18px;">Мэр города</div>
+                    <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">Выборы скоро начнутся</div>
+                </div>
+                <i class="fa-solid fa-landmark-flag" style="font-size: 32px; opacity: 0.8;"></i>
             </div>
-            <i class="fa-solid fa-chevron-right"></i>
-        </div>
-
-        <div class="card" style="display: flex; align-items: center; gap: 15px;">
-            <i class="fa-solid fa-crown" style="font-size: 24px; color: #fbbf24;"></i>
-            <div>
-                <div style="font-weight: bold;">Мэр города</div>
-                <div style="font-size: 13px; color: #9ca3af;">Выборы не объявлены</div>
+            
+            <div class="grid">
+                <div class="grid-item">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>Администрация</span>
+                </div>
+                <div class="grid-item">
+                    <i class="fa-solid fa-newspaper"></i>
+                    <span>Новости</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="p-frac" class="hidden">
-        <h3>Фракции города</h3>
-        <div class="fraction-grid">
-            <div class="frac-card"><i class="fa-solid fa-shield-heart"></i><div>МВД</div></div>
-            <div class="frac-card"><i class="fa-solid fa-pills"></i><div>МЗ</div></div>
-            <div class="frac-card"><i class="fa-solid fa-gun"></i><div>ОПГ</div></div>
-            <div class="frac-card"><i class="fa-solid fa-truck-fast"></i><div>МЧС</div></div>
-        </div>
-    </div>
-
-    <div id="p-profile" class="hidden">
-        <div class="card" style="text-align: center;">
-            <div style="width: 70px; height: 70px; background: #2563eb; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;">
-                <i class="fa-solid fa-user" style="font-size: 30px;"></i>
+        <div id="fractions" class="screen">
+            <h3>Государственные структуры</h3>
+            <div class="grid">
+                <div class="grid-item"><i class="fa-solid fa-shield-halved"></i><span>МВД</span></div>
+                <div class="grid-item"><i class="fa-solid fa-kit-medical"></i><span>МЗ</span></div>
+                <div class="grid-item"><i class="fa-solid fa-fire-extinguisher"></i><span>МЧС</span></div>
+                <div class="grid-item"><i class="fa-solid fa-building-columns"></i><span>Правительство</span></div>
             </div>
-            <h2 id="u-nick" style="margin: 0;">Ник</h2>
-            <p id="u-role" style="color: var(--neon-blue); margin: 5px 0 0;">Роль</p>
         </div>
-        <div class="card" id="admin-panel-link" style="border: 1px solid #a855f7;">
-            <div style="color: #a855f7; font-weight: bold;"><i class="fa-solid fa-hammer"></i> Панель управления</div>
+
+        <div id="jobs" class="screen">
+            <h3>Доступные вакансии</h3>
+            <div class="grid">
+                <div class="grid-item"><i class="fa-solid fa-taxi"></i><span>Такси</span></div>
+                <div class="grid-item"><i class="fa-solid fa-truck"></i><span>Дальнобой</span></div>
+            </div>
+        </div>
+
+        <div id="profile" class="screen">
+            <div class="profile-card">
+                <div class="avatar-circle" id="user-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h2 id="display-nick" style="margin: 0;">Никнейм</h2>
+                <div id="display-role" class="role-pill">Участник</div>
+                
+                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px;">
+                        <small style="color: var(--text-dim); display: block;">ID аккаунта</small>
+                        <b>#77102</b>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px;">
+                        <small style="color: var(--text-dim); display: block;">Репутация</small>
+                        <b style="color: #10b981;">+120</b>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <button class="sos-btn" onclick="alert('Форма SOS: Напишите минимум 5 слов!')">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-    </button>
-
-    <nav class="nav">
-        <a href="javascript:void(0)" class="nav-item active" onclick="sw('home')"><i class="fa-solid fa-house"></i>Главная</a>
-        <a href="javascript:void(0)" class="nav-item" onclick="sw('frac')"><i class="fa-solid fa-users"></i>Фракции</a>
-        <a href="javascript:void(0)" class="nav-item" onclick="sw('profile')"><i class="fa-solid fa-circle-user"></i>Профиль</a>
+    <nav class="nav-bar">
+        <a href="#" class="nav-link active" onclick="showScreen('home', this)">
+            <i class="fa-solid fa-house-chimney"></i><span>Главная</span>
+        </a>
+        <a href="#" class="nav-link" onclick="showScreen('fractions', this)">
+            <i class="fa-solid fa-users"></i><span>Фракции</span>
+        </a>
+        <a href="#" class="nav-link" onclick="showScreen('jobs', this)">
+            <i class="fa-solid fa-briefcase"></i><span>Работа</span>
+        </a>
+        <a href="#" class="nav-link" onclick="showScreen('profile', this)">
+            <i class="fa-solid fa-circle-user"></i><span>Профиль</span>
+        </a>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let user = JSON.parse(localStorage.getItem('d_user'));
+        let userData = JSON.parse(localStorage.getItem('donetsk_user'));
 
-        if (!user) {
-            document.getElementById('reg-screen').style.display = 'flex';
+        if (!userData) {
+            document.getElementById('reg-screen').classList.remove('hidden');
+            document.getElementById('main-content').classList.add('hidden');
         } else {
-            initApp();
+            renderProfile();
         }
 
-        function finishReg() {
-            const nick = document.getElementById('reg-nick').value;
-            const role = document.getElementById('reg-role').value;
+        function saveProfile() {
+            const nick = document.getElementById('nick-input').value;
             if (nick.length < 3) return alert("Ник слишком короткий!");
-            user = { nick, role };
-            localStorage.setItem('d_user', JSON.stringify(user));
-            document.getElementById('reg-screen').style.display = 'none';
-            initApp();
+            
+            userData = { nick: nick, role: "Участник" };
+            localStorage.setItem('donetsk_user', JSON.stringify(userData));
+            
+            document.getElementById('reg-screen').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            renderProfile();
         }
 
-        function initApp() {
-            document.getElementById('u-nick').innerText = user.nick;
-            document.getElementById('u-role').innerText = user.role;
-            if (user.role !== 'Владелец') document.getElementById('admin-panel-link').classList.add('hidden');
+        function renderProfile() {
+            document.getElementById('display-nick').innerText = userData.nick;
+            document.getElementById('display-role').innerText = userData.role;
         }
 
-        function sw(p) {
-            ['p-home', 'p-frac', 'p-profile'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById('p-' + p).classList.remove('hidden');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-
-        function copySrv() {
-            const c = document.getElementById('sc').innerText;
-            navigator.clipboard.writeText(c);
-            tg.HapticFeedback.notificationOccurred('success');
-            alert("Код сервера скопирован!");
+        function showScreen(id, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            el.classList.add('active');
+            
+            tg.HapticFeedback.impactOccurred('light');
         }
     </script>
 </body>
