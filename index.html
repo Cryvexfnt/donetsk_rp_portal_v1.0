@@ -1,154 +1,646 @@
-import React, { useState } from 'react';
-import { 
-  Home, Trophy, Users, User, Wallet, 
-  ChevronRight, Star, Shield, ShoppingBag, Settings 
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donetsk RP Forum</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-const DonetskApp = () => {
-  const [activeTab, setActiveTab] = useState('home');
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-  // Данные игрока
-  const playerData = {
-    username: "Cryvex",
-    balance: "1,250,000",
-    donat: "500",
-    level: 12,
-    xp: 75, // в процентах
-    rank: "Местный"
-  };
+body{
+font-family:'Inter',sans-serif;
+background:#edf1f5;
+color:#111827;
+}
 
-  return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white font-sans selection:bg-[#8774e1]/30">
-      
-      {/* --- ВЕРХНЯЯ ПАНЕЛЬ (HEADER) --- */}
-      <header className="sticky top-0 z-50 bg-[#161616]/80 backdrop-blur-xl border-b border-white/5 p-4 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8774e1] to-[#5a4ad1] flex items-center justify-center shadow-lg shadow-[#8774e1]/20">
-            <span className="font-black text-xl">D</span>
-          </div>
-          <div>
-            <h1 className="text-sm font-bold tracking-tight uppercase">Donetsk <span className="text-[#8774e1]">RP</span></h1>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-[10px] text-gray-400 font-medium">Online: 842</span>
-            </div>
-          </div>
-        </div>
-        <button className="p-2 bg-white/5 rounded-full border border-white/10">
-          <Settings size={20} className="text-gray-400" />
-        </button>
-      </header>
+header{
+background:linear-gradient(90deg,#1d4ed8,#2563eb);
+padding:18px 40px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+position:sticky;
+top:0;
+z-index:999;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+}
 
-      {/* --- ОСНОВНОЙ КОНТЕНТ --- */}
-      <main className="p-4 pb-32 space-y-6">
-        
-        {/* КАРТОЧКА ПРОФИЛЯ */}
-        <section className="relative overflow-hidden bg-[#1c1c1c] rounded-3xl border border-white/10 p-5 shadow-2xl">
-          <div className="relative z-10">
-            <div className="flex justify-between items-start mb-6">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <img 
-                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donetsk" 
-                    className="w-16 h-16 rounded-2xl bg-[#252525] border-2 border-[#8774e1]" 
-                    alt="Avatar"
-                  />
-                  <div className="absolute -bottom-2 -right-2 bg-[#8774e1] text-[10px] px-2 py-0.5 rounded-full font-bold">
-                    {playerData.level} LVL
-                  </div>
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold">{playerData.username}</h2>
-                  <p className="text-xs text-gray-400">{playerData.rank}</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Донат</div>
-                <div className="text-[#8774e1] font-mono font-bold">{playerData.donat} DC</div>
-              </div>
-            </div>
+.logo{
+font-size:32px;
+font-weight:800;
+color:white;
+}
 
-            {/* Прогресс бар */}
-            <div className="space-y-2">
-              <div className="flex justify-between text-[11px] font-medium">
-                <span className="text-gray-400">Опыт уровня</span>
-                <span>{playerData.xp}%</span>
-              </div>
-              <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-[#8774e1] to-[#b0a3ff] rounded-full transition-all duration-1000"
-                  style={{ width: `${playerData.xp}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
-          {/* Декоративный круг на фоне */}
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#8774e1]/10 blur-3xl rounded-full"></div>
-        </section>
+.logo span{
+color:#bfdbfe;
+}
 
-        {/* БАЛАНС */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-[#1c1c1c] p-4 rounded-2xl border border-white/5 flex flex-col gap-1">
-            <span className="text-[10px] text-gray-500 uppercase font-bold">На руках</span>
-            <span className="text-lg font-mono font-bold text-green-400">₽{playerData.balance}</span>
-          </div>
-          <div className="bg-[#1c1c1c] p-4 rounded-2xl border border-white/5 flex flex-col gap-1">
-            <span className="text-[10px] text-gray-500 uppercase font-bold">В банке</span>
-            <span className="text-lg font-mono font-bold text-blue-400">₽4,000,000</span>
-          </div>
-        </div>
+nav{
+display:flex;
+gap:18px;
+}
 
-        {/* СЕТКА РАЗДЕЛОВ (Как на сайте) */}
-        <section className="grid grid-cols-2 gap-4">
-          <MenuCard icon={<Shield className="text-red-400" />} title="Фракции" subtitle="Управление" />
-          <MenuCard icon={<ShoppingBag className="text-yellow-400" />} title="Магазин" subtitle="Донат услуги" />
-          <MenuCard icon={<Users className="text-blue-400" />} title="Семьи" subtitle="Рейтинги" />
-          <MenuCard icon={<Star className="text-purple-400" />} title="Квесты" subtitle="Задания" />
-        </section>
+nav button{
+background:rgba(255,255,255,0.12);
+border:none;
+color:white;
+padding:12px 18px;
+border-radius:12px;
+cursor:pointer;
+font-weight:600;
+transition:0.2s;
+}
 
-        {/* КНОПКА ДЕЙСТВИЯ */}
-        <button className="w-full group relative overflow-hidden bg-[#8774e1] p-5 rounded-2xl font-black uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(135,116,225,0.3)] active:scale-95 transition-all">
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            Играть в Donetsk RP <ChevronRight size={18} />
-          </span>
-          <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12"></div>
-        </button>
+nav button:hover{
+background:rgba(255,255,255,0.22);
+}
 
-      </main>
+.container{
+width:92%;
+max-width:1450px;
+margin:auto;
+margin-top:30px;
+}
 
-      {/* --- НИЖНЕЕ МЕНЮ (NAVBAR) --- */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#161616]/90 backdrop-blur-2xl border-t border-white/5 px-6 py-4 flex justify-between items-center shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
-        <NavButton active={activeTab === 'home'} onClick={() => setActiveTab('home')} icon={<Home />} label="Главная" />
-        <NavButton active={activeTab === 'tasks'} onClick={() => setActiveTab('tasks')} icon={<Trophy />} label="Задания" />
-        <NavButton active={activeTab === 'friends'} onClick={() => setActiveTab('friends')} icon={<Users />} label="Друзья" />
-        <NavButton active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} icon={<User />} label="Профиль" />
-      </nav>
-    </div>
-  );
+.hero{
+background:linear-gradient(rgba(15,23,42,0.82),rgba(15,23,42,0.82)),url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1920');
+background-size:cover;
+background-position:center;
+border-radius:28px;
+padding:80px 40px;
+color:white;
+margin-bottom:30px;
+}
+
+.hero h1{
+font-size:60px;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:19px;
+color:#cbd5e1;
+margin-bottom:25px;
+}
+
+.hero button{
+background:#2563eb;
+border:none;
+padding:16px 28px;
+font-size:17px;
+border-radius:14px;
+color:white;
+font-weight:700;
+cursor:pointer;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.stat{
+background:white;
+padding:30px;
+border-radius:22px;
+box-shadow:0 4px 20px rgba(0,0,0,0.06);
+}
+
+.stat h2{
+font-size:42px;
+color:#2563eb;
+margin-bottom:10px;
+}
+
+.page{
+display:none;
+}
+
+.page.active{
+display:block;
+}
+
+.category{
+margin-bottom:30px;
+}
+
+.category-title{
+background:#2563eb;
+color:white;
+padding:18px 25px;
+font-size:21px;
+font-weight:700;
+border-radius:18px 18px 0 0;
+}
+
+.forum-box{
+background:white;
+border-radius:0 0 18px 18px;
+overflow:hidden;
+box-shadow:0 4px 20px rgba(0,0,0,0.05);
+}
+
+.forum-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:24px;
+border-bottom:1px solid #eef2f7;
+transition:0.2s;
+cursor:pointer;
+}
+
+.forum-item:hover{
+background:#f8fbff;
+}
+
+.forum-left{
+display:flex;
+gap:18px;
+align-items:center;
+}
+
+.icon{
+width:58px;
+height:58px;
+background:#dbeafe;
+color:#2563eb;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:800;
+font-size:24px;
+border-radius:16px;
+}
+
+.forum-text h3{
+font-size:20px;
+margin-bottom:6px;
+}
+
+.forum-text p{
+color:#64748b;
+}
+
+.forum-right{
+text-align:right;
+}
+
+.forum-right h4{
+color:#2563eb;
+margin-bottom:5px;
+}
+
+.panel{
+background:white;
+padding:30px;
+border-radius:22px;
+box-shadow:0 4px 20px rgba(0,0,0,0.06);
+margin-bottom:30px;
+}
+
+.panel h2{
+margin-bottom:20px;
+}
+
+input,select,textarea{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #dbe4ee;
+margin-bottom:15px;
+font-size:15px;
+font-family:inherit;
+}
+
+textarea{
+min-height:120px;
+resize:vertical;
+}
+
+.main-btn{
+background:#2563eb;
+color:white;
+border:none;
+padding:14px 24px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer;
+}
+
+.role-card{
+padding:18px;
+border-radius:14px;
+background:#f8fafc;
+border:1px solid #dbe4ee;
+margin-bottom:15px;
+}
+
+.badge{
+display:inline-block;
+padding:6px 12px;
+border-radius:999px;
+font-size:13px;
+font-weight:700;
+margin-top:10px;
+}
+
+.owner{
+background:#facc15;
+color:#111827;
+}
+
+.admin{
+background:#ef4444;
+color:white;
+}
+
+.moder{
+background:#22c55e;
+color:white;
+}
+
+.user{
+background:#64748b;
+color:white;
+}
+
+.topic{
+background:#f8fafc;
+padding:20px;
+border-radius:16px;
+margin-bottom:15px;
+}
+
+.topic h3{
+margin-bottom:10px;
+}
+
+.topic small{
+color:#64748b;
+}
+
+footer{
+margin-top:50px;
+padding:35px;
+background:#0f172a;
+color:#94a3b8;
+text-align:center;
+}
+
+@media(max-width:800px){
+
+header{
+flex-direction:column;
+gap:20px;
+padding:20px;
+}
+
+nav{
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.hero h1{
+font-size:40px;
+}
+
+.forum-item{
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+}
+
+.forum-right{
+text-align:left;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">Donetsk <span>RP</span></div>
+
+<nav>
+<button onclick="showPage('forum')">Форум</button>
+<button onclick="showPage('topics')">Темы</button>
+<button onclick="showPage('admin')">Админ-панель</button>
+<button onclick="showPage('roles')">Роли</button>
+<button onclick="showPage('profile')">Профиль</button>
+</nav>
+</header>
+
+<div class="container">
+
+<section class="hero">
+<h1>Donetsk RP Forum</h1>
+<p>Официальный форум проекта Donetsk RP в стиле Rodina RP</p>
+<button onclick="showPage('topics')">Перейти к темам</button>
+</section>
+
+<div class="stats">
+<div class="stat">
+<h2 id="usersCount">1</h2>
+<p>Пользователей</p>
+</div>
+
+<div class="stat">
+<h2 id="topicsCount">0</h2>
+<p>Тем на форуме</p>
+</div>
+
+<div class="stat">
+<h2>ONLINE</h2>
+<p>Сервер Donetsk RP</p>
+</div>
+</div>
+
+<!-- FORUM -->
+<div class="page active" id="forum">
+
+<div class="category">
+<div class="category-title">Администрация проекта</div>
+<div class="forum-box">
+
+<div class="forum-item" onclick="showPage('topics')">
+<div class="forum-left">
+<div class="icon">N</div>
+<div class="forum-text">
+<h3>Новости проекта</h3>
+<p>Все обновления и новости Donetsk RP</p>
+</div>
+</div>
+
+<div class="forum-right">
+<h4>Форум</h4>
+<p>Открыть раздел</p>
+</div>
+</div>
+
+<div class="forum-item" onclick="showPage('topics')">
+<div class="forum-left">
+<div class="icon">R</div>
+<div class="forum-text">
+<h3>Правила сервера</h3>
+<p>Правила проекта и наказания</p>
+</div>
+</div>
+
+<div class="forum-right">
+<h4>Форум</h4>
+<p>Открыть раздел</p>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="category">
+<div class="category-title">Государственные организации</div>
+<div class="forum-box">
+
+<div class="forum-item" onclick="showPage('topics')">
+<div class="forum-left">
+<div class="icon">M</div>
+<div class="forum-text">
+<h3>МВД</h3>
+<p>Министерство внутренних дел</p>
+</div>
+</div>
+
+<div class="forum-right">
+<h4>34 темы</h4>
+<p>Последний ответ недавно</p>
+</div>
+</div>
+
+<div class="forum-item" onclick="showPage('topics')">
+<div class="forum-left">
+<div class="icon">F</div>
+<div class="forum-text">
+<h3>ФСБ</h3>
+<p>Федеральная служба безопасности</p>
+</div>
+</div>
+
+<div class="forum-right">
+<h4>12 тем</h4>
+<p>Последний ответ недавно</p>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<!-- TOPICS -->
+<div class="page" id="topics">
+
+<div class="panel">
+<h2>Создание темы</h2>
+
+<input type="text" id="topicTitle" placeholder="Название темы">
+<textarea id="topicText" placeholder="Текст темы"></textarea>
+
+<button class="main-btn" onclick="createTopic()">Создать тему</button>
+</div>
+
+<div class="panel">
+<h2>Темы форума</h2>
+<div id="topicsList"></div>
+</div>
+
+</div>
+
+<!-- ADMIN -->
+<div class="page" id="admin">
+<div class="panel">
+<h2>Админ-панель</h2>
+
+<p style="margin-bottom:20px;">
+Текущая роль:
+<strong style="color:#2563eb;">Владелец проекта</strong>
+</p>
+
+<input type="text" id="roleName" placeholder="Ник игрока">
+
+<select id="roleSelect">
+<option>Пользователь</option>
+<option>Модератор</option>
+<option>Администратор</option>
+<option>Владелец проекта</option>
+</select>
+
+<button class="main-btn" onclick="giveRole()">Выдать роль</button>
+</div>
+</div>
+
+<!-- ROLES -->
+<div class="page" id="roles">
+<div class="panel">
+<h2>Список ролей</h2>
+<div id="rolesList"></div>
+</div>
+</div>
+
+<!-- PROFILE -->
+<div class="page" id="profile">
+<div class="panel">
+<h2>Профиль</h2>
+
+<div class="role-card">
+<h3>Speaker_Man_Titan</h3>
+<div class="badge owner">Владелец проекта</div>
+</div>
+
+<p style="margin-top:20px;color:#64748b;">
+Главный аккаунт форума Donetsk RP.
+</p>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+© 2026 Donetsk RP Forum — Все права защищены
+</footer>
+
+<script>
+
+const pages=document.querySelectorAll('.page');
+
+function showPage(id){
+pages.forEach(page=>page.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+let topics=JSON.parse(localStorage.getItem('drp_topics'))||[];
+let roles=JSON.parse(localStorage.getItem('drp_roles'))||[
+{
+name:'Speaker_Man_Titan',
+role:'Владелец проекта'
+}
+];
+
+function updateTopics(){
+
+const list=document.getElementById('topicsList');
+list.innerHTML='';
+
+if(topics.length===0){
+list.innerHTML='<p style="color:#64748b;">Тем пока нет.</p>';
+}
+
+topics.forEach(topic=>{
+
+list.innerHTML+=`
+<div class="topic">
+<h3>${topic.title}</h3>
+<p>${topic.text}</p>
+<br>
+<small>Автор: ${topic.author}</small>
+</div>
+`;
+
+});
+
+localStorage.setItem('drp_topics',JSON.stringify(topics));
+
+document.getElementById('topicsCount').innerText=topics.length;
+}
+
+function createTopic(){
+
+const title=document.getElementById('topicTitle').value;
+const text=document.getElementById('topicText').value;
+
+if(title.trim()===''||text.trim()===''){
+alert('Заполни все поля');
+return;
+}
+
+const topic={
+title:title,
+text:text,
+author:'Speaker_Man_Titan'
 };
 
-// Вспомогательный компонент для карточек меню
-const MenuCard = ({ icon, title, subtitle }) => (
-  <button className="bg-[#1c1c1c] p-4 rounded-2xl border border-white/5 flex flex-col items-start gap-3 hover:bg-[#252525] transition-colors text-left group">
-    <div className="p-2 bg-white/5 rounded-xl group-hover:scale-110 transition-transform">
-      {icon}
-    </div>
-    <div>
-      <div className="text-sm font-bold">{title}</div>
-      <div className="text-[10px] text-gray-500">{subtitle}</div>
-    </div>
-  </button>
-);
+topics.unshift(topic);
 
-// Вспомогательный компонент для кнопок навигации
-const NavButton = ({ active, icon, label, onClick }) => (
-  <button 
-    onClick={onClick}
-    className={`flex flex-col items-center gap-1 transition-all ${active ? 'text-[#8774e1] scale-110' : 'text-gray-500'}`}
-  >
-    {React.cloneElement(icon, { size: 22, strokeWidth: active ? 2.5 : 2 })}
-    <span className={`text-[10px] font-bold ${active ? 'opacity-100' : 'opacity-50'}`}>{label}</span>
-  </button>
-);
+updateTopics();
 
-export default DonetskApp;
+alert('Тема создана');
+
+document.getElementById('topicTitle').value='';
+document.getElementById('topicText').value='';
+}
+
+function updateRoles(){
+
+const list=document.getElementById('rolesList');
+list.innerHTML='';
+
+roles.forEach(user=>{
+
+let badgeClass='user';
+
+if(user.role==='Владелец проекта') badgeClass='owner';
+if(user.role==='Администратор') badgeClass='admin';
+if(user.role==='Модератор') badgeClass='moder';
+
+list.innerHTML+=`
+<div class="role-card">
+<h3>${user.name}</h3>
+<div class="badge ${badgeClass}">${user.role}</div>
+</div>
+`;
+
+});
+
+localStorage.setItem('drp_roles',JSON.stringify(roles));
+
+document.getElementById('usersCount').innerText=roles.length;
+}
+
+function giveRole(){
+
+const name=document.getElementById('roleName').value;
+const role=document.getElementById('roleSelect').value;
+
+if(name.trim()===''){
+alert('Введите ник');
+return;
+}
+
+roles.push({
+name:name,
+role:role
+});
+
+updateRoles();
+
+alert('Роль выдана');
+
+document.getElementById('roleName').value='';
+}
+
+updateTopics();
+updateRoles();
+
+</script>
+
+</body>
+</html>
